@@ -1,5 +1,18 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose
+
+const sub = new Schema({
+    no:{
+        type:Number,
+        default:1,
+        
+    },
+    item:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"item",
+    }
+},{ _id : false })
+
 const UserSchema = new Schema({
     name: {
         type: String,
@@ -18,11 +31,9 @@ const UserSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    cart:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"item"
-    }]
+    cart:[sub]
 });
+
 const user = mongoose.model('user', UserSchema);
 user.createIndexes()
 module.exports = user

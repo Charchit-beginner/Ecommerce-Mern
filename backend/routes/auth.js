@@ -47,10 +47,10 @@ router.post('/register', [
 router.post('/login', [
     body('email', "Enter a valid Email").isEmail(),
     body('password', "Password can't be blank").exists(),
-],
+],      
     async (req, res) => {
         const errors = validationResult(req);
-        if (!errors.isEmpty()) {
+        if (!errors.isEmpty()) {    
             return res.status(400).json({ errors: errors.array() });
         }
         const { email, password } = req.body
@@ -81,11 +81,13 @@ router.post('/getuser', fetchUser ,async (req, res) => {
 
         try {
             userid = req.user.id
-            const user = await User.findById(userid).select("-password")
+            const user = await User.findById(userid).populate("cart").select("-password")
+            
             res.send(user)
         } catch (error) {
             console.log(error)
             res.status(500).send("Internal Server Error")
         }
     })
+    
 module.exports = router

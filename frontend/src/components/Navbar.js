@@ -1,13 +1,24 @@
 import React , {useRef} from 'react'
-import {Link , useLocation} from "react-router-dom"
+import {Link , useLocation, useHistory} from "react-router-dom"
 
 function Navbar() {
     const navBtn = useRef(null)
+    const history = useHistory()
     let location = useLocation()
     const ToggleNav = () => {
         navBtn.current.classList.toggle("hidden")
     }
-    
+    const logout = () => {
+        localStorage.removeItem("token")
+        history.push("/login")
+      }
+    const returnBtn = () =>{
+        if (localStorage.getItem("token")){
+          return <button className="py-2 px-4 bg-purple-600 text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600" onClick={logout}>Logout</button>
+        }
+        return <><Link to="/login"><button className=" py-2 px-4 bg-purple-600 text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 ">sign In</button></Link>
+        <Link to="/register"><button className=" py-2 px-4 bg-purple-600 text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 ">Sign Up</button></Link></>
+      }  
     return (
         <>
             <nav className="bg-white shadow-lg fixed top-0 right-0 left-0">
@@ -20,9 +31,9 @@ function Navbar() {
                             <span className={`px-2 py-4  ${location.pathname == '/' ? "border-b-4":""} border-purple-600 hover:bg-purple-50 w-30 text-center`}>
                                 <Link to="/" className="px-2 py-4  hover:text-purple-900 font-semibold transition duration-300">Home</Link >
                             </span>
-                            <span className={`px-2 py-4  ${location.pathname == '/products' ? "border-b-4":""} border-purple-600 hover:bg-purple-50 w-30 text-center`}>
+                            {/* <span className={`px-2 py-4  ${location.pathname == '/products' ? "border-b-4":""} border-purple-600 hover:bg-purple-50 w-30 text-center`}>
                                 <Link to="/products" className="px-2 py-4 hover:text-purple-900 font-semibold transition duration-300">Products</Link >
-                            </span>
+                            </span> */}
                             <span className={`px-2 py-4  ${location.pathname == '/cart' ? "border-b-4":""} border-purple-600 hover:bg-purple-50 w-30 text-center`}>
                                 <Link to="/cart" className="px-2 py-4 hover:text-purple-900 font-semibold transition duration-300">Cart</Link >
                             </span>
@@ -30,8 +41,7 @@ function Navbar() {
                     </div>
                         
                     <div className="md:flex hidden items-center space-x-4">
-                        <Link to="/login"><button className=" py-2 px-4 bg-purple-600 text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 ">sign In</button></Link>
-                        <Link to="/register"><button className=" py-2 px-4 bg-purple-600 text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 ">Sign Up</button></Link>
+                        {returnBtn()}
                     </div>
                     <div className="md:hidden flex items-center my-3">
                             <button className="outline-none mobile-menu-button" onClick={ToggleNav}>
@@ -54,12 +64,11 @@ function Navbar() {
             <div ref={navBtn} className="hidden md:hidden p-2">
                 <ul className="w-full ">
                     <li className="w-full flex justify-center text-md p-2 hover:bg-purple-300 transition duration-300"><Link to="/">Home</Link ></li>
-                    <li className="w-full flex justify-center text-md p-2 hover:bg-purple-300 transition duration-300"><Link to="/products">Products</Link ></li>
+                    {/* <li className="w-full flex justify-center text-md p-2 hover:bg-purple-300 transition duration-300"><Link to="/products">Products</Link ></li> */}
                     <li className="w-full flex justify-center text-md p-2 hover:bg-purple-300 transition duration-300"><Link to="/cart">Cart</Link ></li>
                 </ul>
                 <div className="flex justify-center space-x-3">
-                <Link to="/login"><button className=" py-2 px-4 bg-purple-600 text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 ">sign In</button></Link>
-                <Link to="/register"><button className=" py-2 px-4 bg-purple-600 text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 ">Sign Up</button></Link>
+                {returnBtn()}
                 </div>
                         </div>
                     </nav>
